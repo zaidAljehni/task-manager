@@ -1,10 +1,27 @@
 const express = require("express");
+const connectDB = require("./db/connect");
+const authRouter = require("./routes/auth");
 const tasksRouter = require("./routes/tasks");
+require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT | 3000;
 
+app.use(express.json());
 app.use("/", authRouter);
 app.use("/api/tasks", tasksRouter);
 
-app.listen(PORT, console.log(`Server is up and running on port ${PORT}...`))
+
+const start = () => {
+    connectDB(process.env.DB_URI)
+    .then(() => {
+        console.log("Connected to DB...");
+        app.listen(process.env.PORT, console.log(`Server is up and running on port ${process.env.PORT}...`));
+    })
+    .catch((error) => {
+        console.error("FAILED to start the server...");
+        console.error(error.message);
+        process.exit(1);
+    });
+}
+
+start();
