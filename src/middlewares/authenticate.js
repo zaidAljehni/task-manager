@@ -14,7 +14,12 @@ const authenticate = async (request, response, next) => {
         if (!decodedToken) {
             throw Error("Not authorized to access this url");
         }
+
         const user = await User.findById(decodedToken["userId"]);
+        if (!user) {
+            throw Error("Not authorized to access this url");
+        }
+
         request.user = user;
         next();
     } catch (error) {
