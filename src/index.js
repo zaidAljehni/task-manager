@@ -4,6 +4,7 @@ const connectDB = require("./db/connect");
 const authenticate = require("./middlewares/authenticate");
 const authRouter = require("./routes/auth");
 const tasksRouter = require("./routes/tasks");
+const accountRouter = require("./routes/account");
 require("dotenv").config();
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(cookieParser());
 
 app.use("/", authRouter);
 app.use("/api/tasks", authenticate, tasksRouter);
+app.use("/api/account", authenticate, accountRouter);
 
 
 const start = () => {
